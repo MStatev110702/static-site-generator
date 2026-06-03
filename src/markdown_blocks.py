@@ -39,7 +39,6 @@ def block_to_block_type(block):
 
     return BlockType.PARAGRAPH
     
-
 def markdown_to_blocks(markdown):
     paragraphs = markdown.split('\n\n')
     blocks = []
@@ -89,7 +88,7 @@ def markdown_to_html_node(markdown):
     return ParentNode(tag="div", children=htmlnodes)
     
 def text_to_children(text):
-    text_nodes = text_to_textnodes(text)
+    text_nodes = text_to_textnodes(text.lstrip())
     children = []
     for node in text_nodes:
         children.append(text_node_to_html_node(node))

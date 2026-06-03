@@ -6,6 +6,7 @@ from inline_markdown import (
     text_to_textnodes,
     extract_markdown_links,
     extract_markdown_images,
+    extract_title
 )
 from textnode import TextNode, TextType
 
@@ -188,6 +189,47 @@ class TestInlineMarkdown(unittest.TestCase):
             ],
             nodes,
         )
+    
+    def test_extract_title_eq(self):
+        actual = extract_title("# This is a title")
+        self.assertEqual(actual, "This is a title")
+
+    def test_extract_title_eq_double(self):
+        actual = extract_title(
+            """
+# This is a title
+
+# This is a second title that should be ignored
+"""
+        )
+        self.assertEqual(actual, "This is a title")
+
+    def test_extract_title_eq_long(self):
+        actual = extract_title(
+            """
+# title
+
+this is a bunch
+
+of text
+
+- and
+- a
+- list
+"""
+        )
+        self.assertEqual(actual, "title")
+
+    def test_extract_title_none(self):
+        try:
+            extract_title(
+                """
+no title
+"""
+            )
+            self.fail("Should have raised an exception")
+        except Exception as e:
+            pass
 
 
 if __name__ == "__main__":
