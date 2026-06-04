@@ -2,7 +2,7 @@ import os
 from markdown_blocks import markdown_to_html_node
 from inline_markdown import extract_title
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, base_path):
     print(f"Generating page from {from_path} to  {dest_path} using {template_path}")
     
     from_file = open(from_path, "r")
@@ -19,6 +19,8 @@ def generate_page(from_path, template_path, dest_path):
 
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
+    template = template.replace("href=/", f'href="{base_path}"')
+    template = template.replace("src=/", f'src="{base_path}"')
     
     dest_dir_path = os.path.dirname(dest_path)
     
@@ -28,14 +30,14 @@ def generate_page(from_path, template_path, dest_path):
     to_file = open(dest_path, "w")
     to_file.write(template)
     
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, base_path):
     content = os.listdir(dir_path_content)
     for item in content:
         full_path = os.path.join(dir_path_content, item)
         if not os.path.isfile(full_path):
-            generate_pages_recursive(full_path, template_path, os.path.join(dest_dir_path, item))
+            generate_pages_recursive(full_path, template_path, os.path.join(dest_dir_path, item), base_path)
             continue
 
         filename = os.path.splitext(item)[0] + ".html"
         dest_path = os.path.join(dest_dir_path, filename)
-        generate_page(full_path, template_path, dest_path)
+        generate_page(full_path, template_path, dest_path, base_path)
