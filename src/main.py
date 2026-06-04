@@ -3,7 +3,7 @@ from copystatic import copy_static_to_dest
 from generate import generate_pages_recursive
 
 dir_path_static = "./static"
-dir_path_public = "./public"
+dir_path_public = "./docs"
 
 def main():
     base_path = sys.argv[1] if len(sys.argv) > 1 else ""
